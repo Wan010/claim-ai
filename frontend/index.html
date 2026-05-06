@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaimAI — Get Refunds Faster</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#050A14;
+  color:#fff;
+  margin:0;
+}
+.container{
+  max-width:900px;
+  margin:0 auto;
+  padding:2rem;
+}
+h1{
+  font-family:'Syne';
+  font-size:2.8rem;
+}
+.accent{
+  color:#4F8EF7;
+}
+.box{
+  margin-top:2rem;
+  padding:1.5rem;
+  background:rgba(255,255,255,0.05);
+  border-radius:12px;
+}
+textarea{
+  width:100%;
+  height:120px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+}
+button{
+  margin-top:10px;
+  width:100%;
+  padding:12px;
+  background:#4F8EF7;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.output{
+  margin-top:15px;
+  background:#0B1220;
+  padding:12px;
+  border-radius:8px;
+  font-size:0.9rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Get your <span class="accent">refunds faster</span></h1>
+  <p>Describe your issue. AI generates a professional claim instantly.</p>
+
+  <div class="box">
+    <h3>Try it now</h3>
+
+    <textarea id="input" placeholder="Example: Flight delayed 5 hours, airline refused refund"></textarea>
+
+    <button onclick="generate()">Generate Claim Letter</button>
+
+    <div id="result" class="output" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+async function generate(){
+  const input = document.getElementById("input").value;
+  const resultBox = document.getElementById("result");
+
+  resultBox.style.display = "block";
+  resultBox.innerText = "Generating...";
+
+  try{
+    const res = await fetch("http://localhost:5000/generate", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ text: input })
+    });
+
+    const data = await res.json();
+    resultBox.innerText = data.output;
+
+  }catch(err){
+    resultBox.innerText = "Error connecting to server";
+  }
+}
+</script>
+
+</body>
+</html>
